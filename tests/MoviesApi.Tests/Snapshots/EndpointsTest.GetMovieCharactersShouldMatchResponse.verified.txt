@@ -1,0 +1,8 @@
+﻿[
+  {
+    CharacterId: 01J6MZYQA6EMMKSTHVPEW7MC3K,
+    Name: Test Character,
+    PlayedBy: Me,
+    Role: Protagonist
+  }
+]

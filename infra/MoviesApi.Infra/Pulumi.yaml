@@ -1,0 +1,7 @@
+name: azure-dotnet-movie-api-example
+runtime: dotnet
+description: Infrastructure project for MoviesApi
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: azure-csharp

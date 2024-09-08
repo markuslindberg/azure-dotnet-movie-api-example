@@ -1,0 +1,10 @@
+﻿[
+  {
+    MovieId: 01J6KMHE380F9EN141A4DR2F2N,
+    Title: Test Movie,
+    Category: Integration Test Category,
+    Year: 2999,
+    Runtime: 120,
+    Rating: 9.0
+  }
+]

@@ -1,0 +1,22 @@
+﻿{
+  MovieId: 01J6N09BPBVZNXT7P5ZF0VVE9M,
+  Title: Test Movie,
+  Category: Integration Test Category,
+  Year: 2999,
+  Runtime: 120,
+  Rating: 9.0,
+  Characters: [
+    {
+      CharacterId: 01J6MZYQA6EMMKSTHVPEW7MC3K,
+      Name: Test Character,
+      PlayedBy: Me,
+      Role: Protagonist
+    }
+  ],
+  Directors: [
+    {
+      DirectorId: 01J6N01XT3W3M2SNQCG9S0XGHE,
+      Name: Test Director
+    }
+  ]
+}
