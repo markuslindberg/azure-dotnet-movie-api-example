@@ -1,14 +1,13 @@
 using Pulumi;
-using Pulumi.AzureNative.Resources;
 using Pulumi.AzureNative.Storage;
 
 namespace MoviesApi.Infra;
 
 public static class OutputHelpers
 {
-  public static Output<string> StorageConnectionString(StorageAccount account, ResourceGroup resourceGroup)
+  public static Output<string> StorageConnectionString(StorageAccount account, Output<string> resourceGroupName)
   {
-    return Output.Tuple(account.Name, resourceGroup.Name).Apply(t =>
+    return Output.Tuple(account.Name, resourceGroupName).Apply(t =>
     {
       (string accountName, string resourceGroupName) = t;
 

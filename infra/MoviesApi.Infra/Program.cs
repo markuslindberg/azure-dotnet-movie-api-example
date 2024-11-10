@@ -6,33 +6,25 @@ using Pulumi.AzureNative.Storage.Inputs;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
 using AppInsights = Pulumi.AzureNative.Insights;
-using OperationalInsights = Pulumi.AzureNative.OperationalInsights;
 
 return await Pulumi.Deployment.RunAsync(() =>
 {
-    var resourceGroup = new ResourceGroup("rg-moviesapi");
-
-    var logAnalyticsWorkspace = new OperationalInsights.Workspace("log-moviesapi", new()
+    var resourceGroupName = Output.Create(GetResourceGroup.InvokeAsync(new GetResourceGroupArgs
     {
-        ResourceGroupName = resourceGroup.Name,
-        RetentionInDays = 30,
-        Sku = new OperationalInsights.Inputs.WorkspaceSkuArgs {
-            Name = OperationalInsights.WorkspaceSkuNameEnum.Free
-        },
-    });
+        ResourceGroupName = "rg-moviesapi"
+    })).Apply(x => x.Name);
 
     var applicationInsights = new AppInsights.Component("appi-moviesapi", new()
     {
-        ResourceGroupName = resourceGroup.Name,
+        ResourceGroupName = resourceGroupName,
         ApplicationType = AppInsights.ApplicationType.Web,
-        IngestionMode = AppInsights.IngestionMode.LogAnalytics,
-        WorkspaceResourceId = logAnalyticsWorkspace.Id,
+        IngestionMode = AppInsights.IngestionMode.ApplicationInsights,
         Kind = "web",
     });
 
     var storageAccount = new StorageAccount("stmoviesapi", new()
     {
-        ResourceGroupName = resourceGroup.Name,
+        ResourceGroupName = resourceGroupName,
         Kind = Kind.StorageV2,
         Sku = new SkuArgs
         {
@@ -42,13 +34,13 @@ return await Pulumi.Deployment.RunAsync(() =>
 
     var table = new Table("Movies", new()
     {
-        ResourceGroupName = resourceGroup.Name,
+        ResourceGroupName = resourceGroupName,
         AccountName = storageAccount.Name,
     });
 
     var appServicePlan = new AppServicePlan("asp-moviesapi", new()
     {
-        ResourceGroupName = resourceGroup.Name,
+        ResourceGroupName = resourceGroupName,
         Kind = "App",
         Sku = new SkuDescriptionArgs
         {
@@ -59,7 +51,7 @@ return await Pulumi.Deployment.RunAsync(() =>
 
     var app = new WebApp($"app-moviesapi", new WebAppArgs
     {
-        ResourceGroupName = resourceGroup.Name,
+        ResourceGroupName = resourceGroupName,
         ServerFarmId = appServicePlan.Id,
         SiteConfig = new SiteConfigArgs
         {
@@ -68,7 +60,7 @@ return await Pulumi.Deployment.RunAsync(() =>
                 new ()
                 {
                     Name = "StorageConnectionString",
-                    Value = OutputHelpers.StorageConnectionString(storageAccount, resourceGroup),
+                    Value = OutputHelpers.StorageConnectionString(storageAccount, resourceGroupName),
                 },
                 new ()
                 {
