@@ -1,2 +1,3 @@
 config:
   azure-native:location: northeurope
+  azure-native:tenantId: 2913cfe2-0499-429b-a269-ba3ca55e6b33
