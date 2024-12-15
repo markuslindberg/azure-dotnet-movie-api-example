@@ -28,6 +28,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check Azurite logs
+        run: docker ps -a && docker logs $(docker ps -q --filter "ancestor=mcr.microsoft.com/azure-storage/azurite")
+
+      - name: Test Azurite connection
+        run: curl http://127.0.0.1:10002
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
