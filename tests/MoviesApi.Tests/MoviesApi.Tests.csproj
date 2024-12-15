@@ -20,8 +20,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="FastEndpoints.Testing" Version="5.31.0" />
-    <PackageReference Include="Verify.Xunit" Version="28.4.0" />
+    <PackageReference Include="FastEndpoints.Testing" Version="5.32.0" />
+    <PackageReference Include="Verify.Xunit" Version="28.5.0" />
   </ItemGroup>
 
   <ItemGroup>
