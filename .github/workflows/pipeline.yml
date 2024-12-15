@@ -27,7 +27,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build --configuration Release --no-restore
-          dotnet test --no-build --no-restore --verbosity minimal
+          dotnet test --configuration Release --no-build --no-restore --verbosity minimal
           dotnet publish --configuration Release --no-restore
 
       - name: Upload app artifact
