@@ -32,7 +32,9 @@ jobs:
         run: docker ps -a && docker logs $(docker ps -q --filter "ancestor=mcr.microsoft.com/azure-storage/azurite")
 
       - name: Test Azurite connection
-        run: curl http://127.0.0.1:10002
+        run: |
+          curl -v http://127.0.0.1:10002
+          curl -v http://azurite:10002
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
@@ -41,7 +43,7 @@ jobs:
 
       - name: Run .NET Build, Test, Publish
         env:
-          StorageConnectionString: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=01JF5V9TMH0PXHJ9KHT0BR633F;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;
+          StorageConnectionString: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=01JF5V9TMH0PXHJ9KHT0BR633F;TableEndpoint=http://azurite:10002/devstoreaccount1;
         run: |
           dotnet restore
           dotnet build --configuration Release --no-restore
