@@ -23,7 +23,7 @@ jobs:
           - 10001:10001 # Queue service
           - 10002:10002 # Table service
         options: >-
-          --env AZURITE_ACCOUNTS=devstoreaccount1:01JF5V9TMH0PXHJ9KHT0BR633F
+          --env AZURITE_ACCOUNTS=devstoreaccount1:MDFKRjVWOVRNSDBQWEhKOUtIVDBCUjYzM0Y=
 
     steps:
       - uses: actions/checkout@v4
