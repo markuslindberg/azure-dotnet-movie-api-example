@@ -33,20 +33,25 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Run .NET Build, Test, Publish
+      - name: Run .NET Restore
+        run: dotnet restore
+
+      - name: Run .NET Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run .NET Test
         env:
           StorageConnectionString: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=MDFKRjVWOVRNSDBQWEhKOUtIVDBCUjYzM0Y=;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;
-        run: |
-          dotnet restore
-          dotnet build --configuration Release --no-restore
-          dotnet test --configuration Release --no-build --no-restore --verbosity minimal
-          dotnet publish --configuration Release --no-restore
+        run: dotnet test --configuration Release --no-build --no-restore --verbosity minimal
+
+      - name: Run .NET Publish
+        run: dotnet publish --configuration Release --no-restore
 
       - name: Upload app artifact
         uses: actions/upload-artifact@v4
         with:
           name: app
-          path: ./src/MoviesApi/bin/Release/publish
+          path: ./src/MoviesApi/bin/Release/net8.0/publish
 
       - name: Generate SBOM
         run: |
@@ -59,9 +64,6 @@ jobs:
         with:
           name: sbom
           path: _manifest/spdx_2.2
-      - uses: advanced-security/spdx-dependency-submission-action@v0.1.1
-        with:
-          filePath: "_manifest/spdx_2.2/"
 
       - uses: azure/login@v2
         with:
@@ -83,6 +85,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.pulumi.outputs.AppName }}
-          package: ./src/MoviesApi/bin/Release/publish
+          package: ./src/MoviesApi/bin/Release/net8.0/publish
 
       - run: az logout
