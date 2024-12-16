@@ -61,7 +61,7 @@ jobs:
         run: |
           curl -Lo $RUNNER_TEMP/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
           chmod +x $RUNNER_TEMP/sbom-tool
-          $RUNNER_TEMP/sbom-tool generate -b . -bc . -pn ${{ github.repository }} -pv 1.0.0 -ps ${{ github.repository_owner }} -nsb https://sbom.mycompany.com -V Verbose -cd "--DirectoryExclusionList **/bin/** --DirectoryExclusionList **/obj/** --DirectoryExclusionList **/.git/**"
+          $RUNNER_TEMP/sbom-tool generate -b . -bc . -pn ${{ github.repository }} -pv 1.0.0 -ps ${{ github.repository_owner }} -nsb https://sbom.mycompany.com -V Information
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
@@ -76,13 +76,16 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Provision Azure infrastructure using Pulumi
-        uses: pulumi/actions@v5
+        uses: pulumi/actions@v6
         id: pulumi
         with:
           command: up
           stack-name: dev
           work-dir: ./infra/MoviesApi.Infra
         env:
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
       - name: Deploy code to Azure App Service
