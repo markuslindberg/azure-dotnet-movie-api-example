@@ -10,6 +10,10 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -57,7 +61,7 @@ jobs:
         run: |
           curl -Lo $RUNNER_TEMP/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
           chmod +x $RUNNER_TEMP/sbom-tool
-          $RUNNER_TEMP/sbom-tool generate -b . -bc . -pn ${{ github.repository }} -pv 1.0.0 -ps ${{ github.repository_owner }} -nsb https://sbom.mycompany.com -V Verbose
+          $RUNNER_TEMP/sbom-tool generate -b . -bc . -pn ${{ github.repository }} -pv 1.0.0 -ps ${{ github.repository_owner }} -nsb https://sbom.mycompany.com -V Verbose -cd "--DirectoryExclusionList **/bin/** --DirectoryExclusionList **/obj/** --DirectoryExclusionList **/.git/**"
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
