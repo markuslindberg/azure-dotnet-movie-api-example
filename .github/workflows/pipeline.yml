@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**.md"
+      - ".editorconfig"
 
 env:
   DOTNET_VERSION: "8.0.x"
