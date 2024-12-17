@@ -1,8 +1,8 @@
-# MoviesApi
+# Movies API
 
-Movies API example using .NET 8 and FastEndpoints.
+Movies API example using .NET 8 and [FastEndpoints](https://fast-endpoints.com/).
 
-* [FastEndpoints](https://fast-endpoints.com/)
+[![Main Workflow](https://github.com/markuslindberg/azure-dotnet-movie-api-example/actions/workflows/pipeline.yml/badge.svg)](https://github.com/markuslindberg/azure-dotnet-movie-api-example/actions/workflows/pipeline.yml)
 
 ## Endpoints
 
@@ -40,6 +40,8 @@ The domain objects (MOVIE, CHARACTER, DIRECTOR) in this example are stored in a 
 ## Observability
 OpenTelemetry-based data collection with Azure Monitor and Application Insights.
 
+## Quality
+
 ### Testing
 Integration testing using xUnit, FastEndpoints.Testing, and Verify for easy snapshot assertion.
 
@@ -52,3 +54,6 @@ Using .NET source code analysis which is enabled by default, and the following t
 
 * [SonarAnalyzer.CSharp](https://github.com/SonarSource/sonar-dotnet)
 * [StyleCop.Analyzers](https://github.com/DotNetAnalyzers/StyleCopAnalyzers)
+
+### Software Bill Of Materials (SBOM)
+Generating SPDX 2.2 compatible SBOM using [Microsoft SBOM Tool](https://github.com/microsoft/sbom-tool) in GitHub Actions. The SBOM is saved as an artifact, and uploaded to GitHub's dependency submission API.
