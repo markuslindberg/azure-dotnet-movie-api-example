@@ -4,7 +4,7 @@ Movies API example using .NET 8 and [FastEndpoints](https://fast-endpoints.com/)
 
 [![Main Workflow](https://github.com/markuslindberg/azure-dotnet-movie-api-example/actions/workflows/pipeline.yml/badge.svg)](https://github.com/markuslindberg/azure-dotnet-movie-api-example/actions/workflows/pipeline.yml)
 
-[![CodeQL Scanning](https://img.shields.io/github/code-scanning/alerts/markuslindberg/azure-dotnet-movie-api-example?label=CodeQL%20Scanning)](https://github.com/markuslindberg/azure-dotnet-movie-api-example/security/code-scanning)
+[![CodeQL](https://github.com/markuslindberg/azure-dotnet-movie-api-example/actions/workflows/codeql.yml/badge.svg)](https://github.com/markuslindberg/azure-dotnet-movie-api-example/actions/workflows/codeql.yml)
 
 ## Endpoints
 
