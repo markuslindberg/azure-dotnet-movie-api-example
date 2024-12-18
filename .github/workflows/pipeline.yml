@@ -33,10 +33,10 @@ jobs:
           --env AZURITE_ACCOUNTS=devstoreaccount1:MDFKRjVWOVRNSDBQWEhKOUtIVDBCUjYzM0Y=
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 #v4.1.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -55,7 +55,7 @@ jobs:
         run: dotnet publish --configuration Release --no-restore
 
       - name: Upload app artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b #v4.5.0
         with:
           name: app
           path: ./src/MoviesApi/bin/Release/net8.0/publish
@@ -67,19 +67,24 @@ jobs:
           $RUNNER_TEMP/sbom-tool generate -b . -bc . -pn ${{ github.repository }} -pv 1.0.0 -ps ${{ github.repository_owner }} -nsb https://sbom.mycompany.com -V Information
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b #v4.5.0
         with:
           name: sbom
           path: _manifest/spdx_2.2
 
-      - uses: azure/login@v2
+      - name: Send SBOM to GitHub dependency submission API
+        uses: advanced-security/spdx-dependency-submission-action@5530bab9ee4bbe66420ce8280624036c77f89746 #v0.1.1
+        with:
+          filePath: "_manifest/spdx_2.2/"
+
+      - uses: azure/login@a65d910e8af852a8061c627c456678983e180302 #v2.2.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Provision Azure infrastructure using Pulumi
-        uses: pulumi/actions@v6
+        uses: pulumi/actions@c7fad9e2f0b79653172b36538b8b34b3c0291952 #v6.0.0
         id: pulumi
         with:
           command: up
@@ -93,7 +98,7 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
       - name: Deploy code to Azure App Service
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@de617f46172a906d0617bb0e50d81e9e3aec24c8 #v3.0.1
         with:
           app-name: ${{ steps.pulumi.outputs.AppName }}
           package: ./src/MoviesApi/bin/Release/net8.0/publish
