@@ -45,11 +45,11 @@ OpenTelemetry-based data collection with Azure Monitor and Application Insights.
 ## Quality
 
 ### Testing
-Integration testing using xUnit, FastEndpoints.Testing, and Verify for easy snapshot assertion.
+Integration testing using xUnit, FastEndpoints.Testing, and Snapshooter for easy snapshot assertion.
 
 * [xUnit](https://xunit.net/)
 * [FastEndpoints.Testing](https://fast-endpoints.com/docs/integration-unit-testing#integration-testing)
-* [Verify](https://github.com/VerifyTests/Verify)
+* [Snapshooter](https://github.com/SwissLife-OSS/Snapshooter)
 
 ### Static Code Analyzers
 Using .NET source code analysis which is enabled by default, and the following third-party analyzers:
