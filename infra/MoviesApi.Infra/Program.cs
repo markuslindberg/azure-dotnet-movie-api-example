@@ -5,7 +5,7 @@ using Pulumi.AzureNative.Resources;
 using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
-using AppInsights = Pulumi.AzureNative.Insights;
+using AppInsights = Pulumi.AzureNative.ApplicationInsights;
 
 return await Pulumi.Deployment.RunAsync(() =>
 {
