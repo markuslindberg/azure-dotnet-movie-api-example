@@ -22,6 +22,6 @@ public class GetMoviesEndpoint(MovieRepository repository) : Endpoint<GetMoviesR
             .Select(mapper.MovieToMovieDto)
             .ToListAsync(ct);
 
-        await SendOkAsync(movies, ct);
+        await Send.OkAsync(movies, ct);
     }
 }

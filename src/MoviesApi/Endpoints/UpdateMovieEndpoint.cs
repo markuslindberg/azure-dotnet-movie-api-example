@@ -20,6 +20,6 @@ public class UpdateMovieEndpoint(MovieRepository repository) : Endpoint<UpdateMo
         var mapper = new MovieMapper();
         var movie = mapper.MovieDtoToMovie(req.Movie);
         await repository.UpsertMovieAsync(movie, ct);
-        await SendOkAsync(req.Movie, ct);
+        await Send.OkAsync(req.Movie, ct);
     }
 }

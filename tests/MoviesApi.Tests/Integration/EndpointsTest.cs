@@ -4,6 +4,7 @@ using FastEndpoints.Testing;
 using MoviesApi.Contracts.Data;
 using MoviesApi.Contracts.Requests;
 using MoviesApi.Endpoints;
+using Snapshooter.Xunit3;
 
 namespace MoviesApi.Tests.Integration;
 
@@ -18,14 +19,14 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
             Directors = [new DirectorDto(Ulid.Parse("01J6N01XT3W3M2SNQCG9S0XGHE"), "Test Director")]
         };
 
-    protected override async Task SetupAsync()
+    protected override async ValueTask SetupAsync()
     {
         await base.SetupAsync();
         var request = new UpdateMovieRequest(TestMovieId, CreateTestMovie(TestMovieId));
         await api.Client.PUTAsync<UpdateMovieEndpoint, UpdateMovieRequest>(request);
     }
 
-    protected override async Task TearDownAsync()
+    protected override async ValueTask TearDownAsync()
     {
         var request = new DeleteMovieRequest(TestMovieId);
         await api.Client.DELETEAsync<DeleteMovieEndpoint, DeleteMovieRequest>(request);
@@ -43,7 +44,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.EndsWith($"/movies/{movieId}", response.Headers.GetValues("Location").SingleOrDefault());
-        await Verify(result);
+        Snapshot.Match(result);
     }
 
     [Fact]
@@ -66,7 +67,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
         var (response, result) = await api.Client.GETAsync<GetMovieCharactersEndpoint, GetMovieCharactersRequest, List<CharacterDto>>(request);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        await Verify(result);
+        Snapshot.Match(result);
     }
 
     [Fact]
@@ -76,7 +77,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
         var (response, result) = await api.Client.GETAsync<GetMovieDirectorsEndpoint, GetMovieDirectorsRequest, List<DirectorDto>>(request);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        await Verify(result);
+        Snapshot.Match(result);
     }
 
     [Fact]
@@ -86,7 +87,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
         var (response, result) = await api.Client.GETAsync<GetMovieEndpoint, GetMovieRequest, MovieDto>(request);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        await Verify(result);
+        Snapshot.Match(result);
     }
 
     [Fact]
@@ -96,7 +97,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
         var (response, result) = await api.Client.GETAsync<GetMoviesEndpoint, GetMoviesRequest, List<MovieDto>>(request);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        await Verify(result.Take(1));
+        Snapshot.Match(result.Take(1));
     }
 
     [Fact]
@@ -106,7 +107,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
         var (response, result) = await api.Client.PUTAsync<UpdateMovieEndpoint, UpdateMovieRequest, MovieDto>(request);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        await Verify(result);
+        Snapshot.Match(result);
     }
 
     [Theory]
@@ -115,7 +116,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
     public async Task CreateMovieShouldMatchStatusCode(int expectedStatusCode, string body)
     {
         var requestBody = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
-        var response = await api.Client.PostAsync("movies", requestBody);
+        var response = await api.Client.PostAsync("movies", requestBody, TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedStatusCode, (int)response.StatusCode);
     }
@@ -124,7 +125,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
     [InlineData(400, "ABC_$£!")]
     public async Task DeleteMovieShouldMatchStatusCode(int expectedStatusCode, string movieId)
     {
-        var response = await api.Client.DeleteAsync($"movies/{movieId}");
+        var response = await api.Client.DeleteAsync($"movies/{movieId}", TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedStatusCode, (int)response.StatusCode);
     }
@@ -134,7 +135,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
     [InlineData(404, "01J6MQFGEC2NVYP4Z3R3V9MPMV")]
     public async Task GetMovieShouldMatchStatusCode(int expectedStatusCode, string movieId)
     {
-        var response = await api.Client.GetAsync($"movies/{movieId}");
+        var response = await api.Client.GetAsync($"movies/{movieId}", TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedStatusCode, (int)response.StatusCode);
     }
@@ -144,7 +145,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
     [InlineData(400, null)]
     public async Task GetMoviesShouldMatchStatusCode(int expectedStatusCode, string? category)
     {
-        var response = await api.Client.GetAsync($"movies?category={category}");
+        var response = await api.Client.GetAsync($"movies?category={category}", TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedStatusCode, (int)response.StatusCode);
     }
@@ -154,7 +155,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
     [InlineData(404, "01J6MQFGEC2NVYP4Z3R3V9MPMV")]
     public async Task GetMovieCharactersShouldMatchStatusCode(int expectedStatusCode, string movieId)
     {
-        var response = await api.Client.GetAsync($"movies/{movieId}/characters");
+        var response = await api.Client.GetAsync($"movies/{movieId}/characters", TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedStatusCode, (int)response.StatusCode);
     }
@@ -164,7 +165,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
     [InlineData(404, "01J6MQFGEC2NVYP4Z3R3V9MPMV")]
     public async Task GetMovieDirectorsShouldMatchStatusCode(int expectedStatusCode, string movieId)
     {
-        var response = await api.Client.GetAsync($"movies/{movieId}/directors");
+        var response = await api.Client.GetAsync($"movies/{movieId}/directors", TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedStatusCode, (int)response.StatusCode);
     }
@@ -176,7 +177,7 @@ public class EndpointsTest(ApiFixture api) : TestBase<ApiFixture>
     public async Task UpdateMovieStatusCodeTheory(int expectedStatusCode, string movieId, string body)
     {
         var requestBody = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
-        var response = await api.Client.PutAsync($"movies/{movieId}", requestBody);
+        var response = await api.Client.PutAsync($"movies/{movieId}", requestBody, TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedStatusCode, (int)response.StatusCode);
     }

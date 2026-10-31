@@ -20,11 +20,11 @@ public class GetMovieEndpoint(MovieRepository repository) : Endpoint<GetMovieReq
         var movie = await repository.GetMovieAsync(req.MovieId, ct);
         if (movie == null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
         var mapper = new MovieMapper();
-        await SendOkAsync(mapper.MovieToMovieDto(movie), ct);
+        await Send.OkAsync(mapper.MovieToMovieDto(movie), ct);
     }
 }

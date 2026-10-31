@@ -20,11 +20,11 @@ public class GetMovieDirectorsEndpoint(MovieRepository repository) : Endpoint<Ge
         var movie = await repository.GetMovieAsync(req.MovieId, ct);
         if (movie == null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
         var mapper = new DirectorMapper();
-        await SendOkAsync(movie.Directors.Select(mapper.DirectorToDirectorDto).ToList(), ct);
+        await Send.OkAsync(movie.Directors.Select(mapper.DirectorToDirectorDto).ToList(), ct);
     }
 }

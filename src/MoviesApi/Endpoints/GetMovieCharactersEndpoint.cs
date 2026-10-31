@@ -20,11 +20,11 @@ public class GetMovieCharactersEndpoint(MovieRepository repository) : Endpoint<G
         var movie = await repository.GetMovieAsync(req.MovieId, ct);
         if (movie == null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
         var mapper = new CharacterMapper();
-        await SendOkAsync(movie.Characters.Select(mapper.CharacterToCharacterDto).ToList(), ct);
+        await Send.OkAsync(movie.Characters.Select(mapper.CharacterToCharacterDto).ToList(), ct);
     }
 }

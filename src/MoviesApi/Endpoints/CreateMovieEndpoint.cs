@@ -27,7 +27,7 @@ public class CreateMovieEndpoint(MovieRepository repository) : Endpoint<CreateMo
         var mapper = new MovieMapper();
         var movie = mapper.MovieDtoToMovie(req.Movie);
         await repository.CreateMovieAsync(movie, ct);
-        await SendCreatedAtAsync<GetMovieEndpoint>(
+        await Send.CreatedAtAsync<GetMovieEndpoint>(
             new { movieId = req.Movie.MovieId }, req.Movie, null, null, generateAbsoluteUrl: true, ct);
     }
 }

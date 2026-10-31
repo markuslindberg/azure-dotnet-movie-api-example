@@ -7,13 +7,9 @@ namespace MoviesApi.Tests.Integration;
 [DisableWafCache]
 public class ApiFixture : AppFixture<Program>
 {
-    protected override Task SetupAsync()
+    protected override ValueTask SetupAsync()
     {
-        DerivePathInfo((sourceFile, projectDirectory, type, method) => new (
-            directory: Path.Combine(projectDirectory, "Snapshots"),
-            typeName: type.Name,
-            methodName: method.Name));
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     protected override void ConfigureApp(IWebHostBuilder a)

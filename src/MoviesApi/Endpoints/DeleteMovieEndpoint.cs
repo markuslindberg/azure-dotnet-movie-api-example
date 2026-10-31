@@ -20,6 +20,6 @@ public class DeleteMovieEndpoint(MovieRepository repository) : Endpoint<DeleteMo
     public override async Task HandleAsync(DeleteMovieRequest req, CancellationToken ct)
     {
         await repository.DeleteMovieAsync(req.MovieId, ct);
-        await SendNoContentAsync(ct);
+        await Send.NoContentAsync(ct);
     }
 }
